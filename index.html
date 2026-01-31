@@ -19,6 +19,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
 
+    <!-- HEIC to JPEG conversion for Apple photos -->
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+
     <style>
         :root {
             --bg-base: #FDFCFB;
@@ -387,13 +390,17 @@
         <div class="container container-md">
             <span class="label reveal">The Photo Archive</span>
             <h2 class="reveal">Moments of Joy</h2>
-            
-            <div class="gallery-masonry reveal">
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600" alt="Family"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600" alt="Joy"></div>
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600" alt="History"></div>
-                <!-- FIXED: Replaced broken URL with a new working vintage photo -->
-                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1586105251261-72a756497a11?w=600" alt="Legacy"></div>
+
+            <div id="gallery-loading" class="reveal" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <p>Loading family memories...</p>
+            </div>
+
+            <div class="gallery-masonry reveal" id="gallery-grid" style="display: none;">
+                <!-- Photos will be loaded dynamically from R2 -->
+            </div>
+
+            <div id="gallery-empty" class="reveal" style="display: none; text-align: center; padding: 3rem; color: var(--text-muted);">
+                <p>No photos yet. Be the first to share a memory!</p>
             </div>
 
             <div class="form-card reveal" style="margin-top: 6rem;">
@@ -524,6 +531,92 @@
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ========== GALLERY LOADING ==========
+        async function loadGallery() {
+            const loadingEl = document.getElementById('gallery-loading');
+            const gridEl = document.getElementById('gallery-grid');
+            const emptyEl = document.getElementById('gallery-empty');
+
+            try {
+                const response = await fetch('/.netlify/functions/gallery');
+                const data = await response.json();
+
+                if (!data.success || !data.photos || data.photos.length === 0) {
+                    loadingEl.style.display = 'none';
+                    emptyEl.style.display = 'block';
+                    return;
+                }
+
+                // Clear loading state
+                loadingEl.style.display = 'none';
+                gridEl.style.display = 'block';
+                gridEl.innerHTML = '';
+
+                // Add each photo to the gallery
+                for (const photo of data.photos) {
+                    const item = document.createElement('div');
+                    item.className = 'gallery-item';
+
+                    if (photo.isVideo) {
+                        // Video element
+                        item.innerHTML = `
+                            <video src="${photo.url}" controls preload="metadata"
+                                   style="width: 100%; display: block;">
+                            </video>
+                            <div style="padding: 0.5rem; font-size: 0.75rem; color: var(--text-muted);">
+                                From ${photo.contributor}
+                            </div>
+                        `;
+                    } else if (photo.isHeic) {
+                        // HEIC image - needs conversion
+                        const img = document.createElement('img');
+                        img.alt = `From ${photo.contributor}`;
+                        img.style.width = '100%';
+                        img.style.display = 'block';
+                        img.dataset.heicUrl = photo.url;
+                        img.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect fill="%23f0ebe5" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="%23a68b67" font-size="14">Converting...</text></svg>';
+                        item.appendChild(img);
+
+                        // Convert HEIC in background
+                        convertHeicImage(img, photo.url);
+                    } else {
+                        // Regular image
+                        item.innerHTML = `<img src="${photo.url}" alt="From ${photo.contributor}" loading="lazy">`;
+                    }
+
+                    gridEl.appendChild(item);
+                }
+
+            } catch (error) {
+                console.error('Failed to load gallery:', error);
+                loadingEl.innerHTML = '<p>Failed to load photos. Please refresh the page.</p>';
+            }
+        }
+
+        // Convert HEIC to displayable format
+        async function convertHeicImage(imgElement, heicUrl) {
+            try {
+                const response = await fetch(heicUrl);
+                const blob = await response.blob();
+
+                const convertedBlob = await heic2any({
+                    blob: blob,
+                    toType: 'image/jpeg',
+                    quality: 0.8
+                });
+
+                const jpegUrl = URL.createObjectURL(convertedBlob);
+                imgElement.src = jpegUrl;
+            } catch (error) {
+                console.error('HEIC conversion failed:', error);
+                imgElement.alt = 'Could not load image';
+                imgElement.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200"><rect fill="%23f0ebe5" width="300" height="200"/><text x="150" y="100" text-anchor="middle" fill="%23c44" font-size="12">Could not load</text></svg>';
+            }
+        }
+
+        // Load gallery on page load
+        loadGallery();
 
         // Photo Upload Handling - Real upload to Family Archive
         const photoInput = document.getElementById('photo-input');
