@@ -565,7 +565,7 @@
 
                 // Success!
                 feedback.style.color = '#A68B67';
-                feedback.innerText = `✓ ${uploaded} photo(s) added to the family archive!`;
+                feedback.innerHTML = `✓ ${uploaded} photo(s) added to the family archive!<br><a href="https://family-archive-vault-production.up.railway.app/gallery" target="_blank" style="color: #A68B67; text-decoration: underline; margin-top: 0.5rem; display: inline-block;">View Family Gallery →</a>`;
 
                 // Clear the input so they can upload more
                 photoInput.value = '';
