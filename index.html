@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="In loving memory of Ruth Tomlinson-Brown (1931-2026). A celebration of a life well lived.">
+    <title>In Loving Memory | Ruth Tomlinson-Brown</title>
+    
+    <!-- Open Graph / Facebook / SMS Sharing Tags (CRITICAL FIX) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ruthtomlinsonbrown.netlify.app">
+    <meta property="og:title" content="In Loving Memory | Ruth Tomlinson-Brown">
+    <meta property="og:description" content="July 18, 1931 - January 14, 2026. Join us in celebrating the life of a beloved mother, grandmother, and community pillar.">
+    <!-- Note: Replace with absolute URL to hosted image for production -->
+    <meta property="og:image" content="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=1200"> 
+
+    <!-- Premium Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Inter:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-base: #FDFCFB;
+            --bg-warm: #F7F3F0;
+            --text-primary: #2D2A26;
+            /* ACCESSIBILITY FIX: Darkened from #5E5852 for better contrast */
+            --text-muted: #4A4540; 
+            --accent: #A68B67;
+            --accent-light: #E8E2DA;
+            --font-serif: 'Bodoni Moda', serif;
+            --font-sans: 'Inter', sans-serif;
+            --font-script: 'Pinyon Script', cursive;
+            --transition-smooth: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        /* UX FIX: scroll-padding ensures headers aren't hidden by sticky nav */
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; font-size: 16px; }
+        
+        body { background-color: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+        h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; letter-spacing: -0.01em; }
+        h1 { font-size: clamp(3.2rem, 8vw, 5.5rem); line-height: 0.95; margin-bottom: 1.5rem; }
+        h2 { font-size: clamp(2.2rem, 5vw, 3rem); margin-bottom: 2rem; text-align: center; }
+        
+        .script-hero { font-family: var(--font-script); font-size: clamp(2rem, 4.5vw, 3rem); color: var(--accent); margin-bottom: 0.5rem; }
+        .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.3em; color: var(--accent); font-weight: 600; display: block; margin-bottom: 1.5rem; text-align: center; }
+
+        .section { padding: 8rem 0; position: relative; }
+        .container { width: 90%; margin: 0 auto; position: relative; z-index: 2; }
+        .container-sm { max-width: 720px; }
+        .container-md { max-width: 960px; }
+
+        /* NEW: STICKY NAVIGATION */
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(253, 252, 251, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            z-index: 1000;
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(166, 139, 103, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+        }
+        .sticky-nav.visible { transform: translateY(0); }
+        .nav-link {
+            font-family: var(--font-sans);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-link:hover { color: var(--accent); }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* HERO */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background-color: var(--bg-warm); padding: 4rem 0; }
+        .hero-img-box { width: clamp(280px, 40vw, 380px); height: clamp(350px, 50vw, 480px); margin: 0 auto 3rem; border-radius: 200px 200px 20px 20px; overflow: hidden; box-shadow: 0 30px 60px -15px rgba(0,0,0,0.15); border: 8px solid white; }
+        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .hero-dates { font-family: var(--font-serif); font-size: 1.4rem; font-style: italic; color: var(--text-muted); margin: 2rem 0; display: flex; justify-content: center; align-items: center; gap: 2rem; }
+        .hero-dates span { width: 40px; height: 1px; background: var(--accent-light); }
+
+        /* OBITUARY REFINEMENTS */
+        .obituary-text { font-size: 1.2rem; color: var(--text-muted); text-align: justify; line-height: 1.8; }
+        .obituary-text p { margin-bottom: 2rem; }
+        .dropcap { float: left; font-family: var(--font-serif); font-size: 5.5rem; line-height: 0.7; padding: 10px 18px 0 0; color: var(--accent); }
+
+        .pull-quote {
+            margin: 4rem 0;
+            padding: 3rem 0;
+            border-top: 1px solid var(--accent-light);
+            border-bottom: 1px solid var(--accent-light);
+            text-align: center;
+        }
+        .pull-quote blockquote {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            font-style: italic;
+            color: var(--accent);
+            line-height: 1.3;
+        }
+        .pull-quote cite {
+            display: block;
+            margin-top: 1rem;
+            font-family: var(--font-sans);
+            font-style: normal;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+        }
+
+        /* SERVICE CARDS WITH TEXTURE */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 4rem; }
+        .card { 
+            background: white; 
+            padding: 4rem 2rem; 
+            border-radius: 4px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); 
+            text-align: center; 
+            border: 1px solid var(--accent-light);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Subtle floral watermark effect */
+        .card::before {
+            content: '✿';
+            position: absolute;
+            bottom: -20px;
+            right: -10px;
+            font-size: 8rem;
+            opacity: 0.03;
+            color: var(--accent);
+        }
+
+        /* PALLBEARERS SECTION */
+        .pallbearers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .pallbearer-list { list-style: none; color: var(--text-muted); font-family: var(--font-serif); font-size: 1.1rem; line-height: 2.2; }
+        .pallbearer-list li { border-bottom: 1px solid #f0f0f0; margin-bottom: 0.5rem; padding-bottom: 0.5rem; }
+        .pallbearer-list li:last-child { border: none; }
+
+        /* GALLERY MASONRY */
+        .gallery-masonry { columns: 3 250px; column-gap: 1.5rem; margin-top: 3rem; }
+        .gallery-item { break-inside: avoid; margin-bottom: 1.5rem; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05); background: var(--accent-light); }
+        .gallery-item img { width: 100%; display: block; filter: grayscale(15%); transition: var(--transition-smooth); }
+        .gallery-item:hover img { filter: grayscale(0%); transform: scale(1.05); }
+
+        /* BUTTONS & FORMS */
+        .btn { 
+            display: inline-block; 
+            padding: 1.1rem 2.8rem; 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-size: 0.85rem; 
+            letter-spacing: 0.2em; 
+            transition: var(--transition-smooth); 
+            text-decoration: none; 
+            box-shadow: 0 10px 20px -5px rgba(166, 139, 103, 0.4);
+        }
+        .btn:hover { background: var(--text-primary); transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(0,0,0,0.2); }
+
+        .upload-zone { 
+            border: 2px dashed var(--accent-light); 
+            padding: 4rem 2rem; 
+            text-align: center; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: var(--transition-smooth); 
+            background: var(--bg-warm);
+        }
+        .upload-zone:hover { border-color: var(--accent); background: #fff; }
+
+        /* POEMS */
+        .poems-wrap { background-color: var(--bg-warm); padding: 10rem 0; border-top: 1px solid var(--accent-light); }
+        .poem-content { font-family: var(--font-serif); font-size: 1.35rem; line-height: 2.4; font-style: italic; white-space: pre-line; color: var(--text-muted); }
+
+        /* NEW ACCORDION STYLES FOR POEMS */
+        .accordion { max-width: 800px; margin: 0 auto; }
+        .accordion-item { border-bottom: 1px solid var(--accent-light); margin-bottom: 1rem; }
+        .accordion-header {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 1.5rem 0;
+            font-family: var(--font-serif);
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            color: var(--accent);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        .accordion-header:hover { color: var(--text-primary); }
+        .accordion-icon { font-size: 1.5rem; transition: transform 0.3s ease; }
+        .accordion-item.active .accordion-icon { transform: rotate(45deg); }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1);
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        .accordion-item.active .accordion-content {
+            /* Open state is handled by JS setting max-height */
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.5s ease;
+            padding-bottom: 2rem;
+        }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: var(--transition-smooth); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) { 
+            .gallery-masonry { columns: 2 150px; } 
+            .section { padding: 5rem 0; }
+            h1 { font-size: 3.5rem; }
+            .obituary-text { text-align: left; font-size: 1.1rem; }
+            .pallbearers-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .pull-quote blockquote { font-size: 1.5rem; }
+            
+            /* Responsive Nav */
+            .sticky-nav { gap: 1.2rem; padding: 1rem 0; }
+            .nav-link { font-size: 0.65rem; letter-spacing: 0.1em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY NAV -->
+    <nav class="sticky-nav" id="sticky-nav">
+        <a href="#obituary" class="nav-link">Life Story</a>
+        <a href="#service" class="nav-link">Service</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#tributes" class="nav-link">Tributes</a>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero" id="home">
+        <div class="container reveal">
+            <div class="hero-img-box">
+                <!-- Using placeholder for demo purposes -->
+                <img src="grandmother in pink sweater.png" alt="Ruth Tomlinson-Brown">
+            </div>
+            <p class="script-hero">Celebrating the life of</p>
+            <h1>Ruth Tomlinson-Brown</h1>
+            <div class="hero-dates">
+                July 18, 1931 <span></span> January 14, 2026
+            </div>
+        </div>
+    </header>
+
+    <!-- OBITUARY -->
+    <section class="section" id="obituary">
+        <div class="container container-sm">
+            <span class="label reveal">The Story of Ruth</span>
+            <h2 class="reveal">A Journey of Compassion</h2>
+            <div class="obituary-text reveal">
+                <p><span class="dropcap">R</span>uth Tomlinson-Brown was born on July 18, 1931, in Wilmington, Delaware, to Willard and Ruth Wilson. The second of three children, Ruth spent her early years in Delaware, where she began building the compassion, strength, and sense of responsibility that would define her life. She passed away peacefully in her sleep on January 14, 2026, in California, at the age of 94.</p>
+                
+                <p>As a young woman, Ruth married Harvey "Tommy" Tomlinson, and together they started a family. In the early 1960s, the family relocated to California when Harvey was transferred to Castle Air Force Base in Atwater. California would become Ruth's permanent home for more than five decades. Merced became the community she served for decades, as she showed up, again and again, for her family and her community.</p>
+
+                <!-- Pull Quote to break up text -->
+                <div class="pull-quote reveal">
+                    <blockquote>"Affectionately known as Triple G, her home was a place of warmth, laughter, and always enough food for anyone who walked through the door."</blockquote>
+                    <cite>A Legacy of Love</cite>
+                </div>
+
+                <p>Ruth began her career in healthcare as a Nurse's Aide—now known as a Certified Nursing Assistant (CNA). In 1962, she started working at General Hospital, later known as Mercy Medical Center, where she served for 28 years until her retirement in 1990. She took pride in caring for others and left a lasting impression on colleagues, patients, and families alike.</p>
+
+                <p>Service extended far beyond Ruth's professional life. She was deeply involved in her community, advocating for children's scholarships, urging city leaders to improve neighborhood infrastructure, and supporting political candidates who championed the needs of the people. Ruth was a longtime, dedicated member of the Second Baptist Church, where she found strength in her faith and built a network of lifelong friends. She lived her faith through action, acting as a second mother to many children in her community through foster care and neighborhood guidance.</p>
+
+                <p>Affectionately known as "Triple G" (Great-Great Grandmother), Ruth's greatest joy was her expansive, loving family. She was a pillar of strength, a source of wisdom, and a beacon of love for five generations. Ruth's legacy of service, faith, and family will continue to inspire those who knew her.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUPPORT -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container container-sm">
+            <div class="support-card reveal">
+                <span class="label">Honoring Her Legacy</span>
+                <h3>Memorial Fund</h3>
+                <p style="color: var(--text-muted); margin: 1.5rem 0 2rem;">In lieu of flowers, the family would appreciate contributions toward memorial expenses to help honor Ruth's remarkable 94 years of life.</p>
+                
+                <!-- GoFundMe Widget -->
+                <div style="max-width: 400px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
+                    <div class="gfm-embed" data-url="https://www.gofundme.com/f/honoring-ruth-with-a-loving-farewell/widget/medium?sharesheet=undefined&attribution_id=sl:694e5d6b-740e-4c18-b639-a61a8646746c"></div>
+                    <script src="https://www.gofundme.com/static/js/embed.js"></script>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICE & PALLBEARERS -->
+    <section class="section" id="service" style="background-color: #fff;">
+        <div class="container container-md">
+            <span class="label reveal">The Homegoing</span>
+            <h2 class="reveal">Service & Remembrance</h2>
+            
+            <div class="service-grid reveal">
+                <div class="card">
+                    <span style="color: var(--accent); font-weight: 600; font-size: 0.9rem;">THE SERVICE</span>
+                    <h3>Celebration of Life</h3>
+                    <p>Friday, February 6, 2026<br>1:00 PM</p>
+                    <p style="margin-top: 1.5rem;"><strong>Christian Life Center</strong><br>650 E. Olive Avenue<br>Merced, CA 95340</p>
+                    <!-- Added Google Maps Link -->
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=Christian+Life+Center+650+E.+Olive+Avenue+Merced+CA+95340" target="_blank" style="display: inline-block; margin-top: 1.2rem; color: var(--accent); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; text-decoration: none; border-bottom: 1px solid rgba(166, 139, 103, 0.3); padding-bottom: 2px;">
+                        Get Directions &rarr;
+                    </a>
+                </div>
+                <div class="card">
+                    <span style="color: var(--accent); font-weight: 600; font-size: 0.9rem;">GATHERING</span>
+                    <h3>The Repast</h3>
+                    <p>Following the Service</p>
+                    <p style="margin-top: 1.5rem;"><strong>Fellowship Hall</strong><br>Christian Life Center</p>
+                </div>
+            </div>
+
+            <!-- New Pallbearers Section -->
+            <div style="margin-top: 8rem;" class="reveal">
+                <span class="label">Honored Attendants</span>
+                <div class="pallbearers-grid">
+                    <div>
+                        <h3 style="margin-bottom: 2rem; font-style: italic;">Pallbearers</h3>
+                        <ul class="pallbearer-list">
+                            <li>Roger Tomlinson, Jr.</li>
+                            <li>Camron Griffin</li>
+                            <li>Darnell Tomlinson</li>
+                            <li>Brian Tomlinson</li>
+                            <li>Virgil Broughton</li>
+                            <li>Shawn Tomlinson</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 2rem; font-style: italic;">Honorary Pallbearers</h3>
+                        <ul class="pallbearer-list">
+                            <li>Abbayael Isreal</li>
+                            <li>Antione Hubbard</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video Tribute -->
+            <div style="width: 100%; max-width: 900px; margin: 8rem auto 0; border-radius: 12px; overflow: hidden; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.2);" class="reveal">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" src="https://www.youtube.com/embed/z6mH4ccl9u0" title="Ruth Tribute" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY & UPLOAD -->
+    <section class="section" id="gallery">
+        <div class="container container-md">
+            <span class="label reveal">The Photo Archive</span>
+            <h2 class="reveal">Moments of Joy</h2>
+            
+            <div class="gallery-masonry reveal">
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600" alt="Family"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600" alt="Joy"></div>
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=600" alt="History"></div>
+                <!-- FIXED: Replaced broken URL with a new working vintage photo -->
+                <div class="gallery-item"><img src="https://images.unsplash.com/photo-1586105251261-72a756497a11?w=600" alt="Legacy"></div>
+            </div>
+
+            <div class="form-card reveal" style="margin-top: 6rem;">
+                <div style="text-align: center; margin-bottom: 2.5rem;">
+                    <h3 style="font-size: 1.8rem;">Add to the Legacy</h3>
+                    <p style="color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0.5rem auto;">Help us preserve Ruth's memory by uploading your favorite photos.</p>
+                </div>
+                
+                <div class="upload-zone" onclick="document.getElementById('photo-input').click()">
+                    <input type="file" id="photo-input" hidden multiple accept="image/*">
+                    <p style="font-size: 1.1rem;"><strong>Tap here to select photos</strong></p>
+                    <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.7;">Upload from your camera roll or computer</p>
+                </div>
+                <div id="upload-feedback" style="display:none; text-align: center; margin-top: 1.5rem; color: var(--accent); font-weight: 500;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRIBUTES -->
+    <section class="section" id="tributes" style="background: white;">
+        <div class="container container-sm">
+            <span class="label reveal">Guestbook</span>
+            <h2 class="reveal">Share a Memory</h2>
+            <div class="form-card reveal">
+                <form onsubmit="event.preventDefault(); document.getElementById('success-msg').style.display='block'; this.reset();">
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label" style="display:block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Your Name</label>
+                        <input type="text" class="form-input" required placeholder="Full Name" style="width: 100%; padding: 1rem; border: 1px solid var(--accent-light); border-radius: 4px; font-family: var(--font-sans);">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 1.5rem;">
+                        <label class="form-label" style="display:block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Message</label>
+                        <textarea class="form-input" rows="6" required placeholder="Share a special memory or message..." style="width: 100%; padding: 1rem; border: 1px solid var(--accent-light); border-radius: 4px; font-family: var(--font-sans);"></textarea>
+                    </div>
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn">Send Tribute</button>
+                    </div>
+                    <p id="success-msg" style="display:none; color: var(--accent); margin-top: 1.5rem; font-size: 1rem; text-align: center;">Thank you. Your message has been sent to the family.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- POEMS (Redesigned as Accordion) -->
+    <section class="section poems-wrap">
+        <div class="container container-sm">
+            <span class="label reveal">Reflections</span>
+            <h2 class="reveal" style="margin-bottom: 3rem;">In Her Memory</h2>
+            
+            <div class="accordion reveal">
+                <!-- Poem 1 -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>When Tomorrow Starts Without Me</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="poem-content">
+                            When tomorrow starts without me,
+                            And I’m not there to see;
+                            If the sun should rise and find your eyes
+                            All filled with tears for me.
+                            I wish so much you wouldn’t cry
+                            The way you did today;
+                            While thinking of the many things
+                            We didn’t get to say.
+
+                            I know how much you love me,
+                            As much as I love you;
+                            And each time that you think of me,
+                            I know you’ll miss me too.
+                            But when tomorrow starts without me,
+                            Please try to understand,
+                            That an angel came and called my name,
+                            And took me by the hand.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Poem 2 (New Addition) -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Do Not Stand at My Grave and Weep</span>
+                        <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="poem-content">
+                            Do not stand at my grave and weep
+                            I am not there. I do not sleep.
+                            I am a thousand winds that blow.
+                            I am the diamond glints on snow.
+                            I am the sunlight on ripened grain.
+                            I am the gentle autumn rain.
+
+                            When you awaken in the morning's hush
+                            I am the swift uplifting rush
+                            Of quiet birds in circled flight.
+                            I am the soft stars that shine at night.
+                            Do not stand at my grave and cry;
+                            I am not there. I did not die.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACKNOWLEDGEMENTS -->
+    <section class="section thanks-section">
+        <div class="container container-sm reveal" style="text-align: center;">
+            <span class="label">Acknowledgements</span>
+            <p class="thanks-text" style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.8;">
+                The family of Ruth Tomlinson-Brown wishes to express our deepest gratitude for the many acts of kindness, comforting messages, and prayers during our time of bereavement. Your love has been a source of great strength. May God continue to bless each of you.
+            </p>
+        </div>
+    </section>
+
+    <footer class="footer" style="padding: 6rem 0; background: var(--text-primary); color: white; text-align: center;">
+        <div class="container">
+            <div class="footer-logo" style="font-family: var(--font-script); font-size: 3rem; margin-bottom: 1rem;">Ruth Tomlinson-Brown</div>
+            <p style="opacity: 0.6; font-family: var(--font-serif); font-style: italic; font-size: 1.2rem;">"Well done, my good and faithful servant."</p>
+            <p style="font-size: 0.75rem; letter-spacing: 0.3em; opacity: 0.4; margin-top: 4rem; font-weight: 300;">© 2026 THE TOMLINSON-BROWN FAMILY</p>
+        </div>
+    </footer>
+
+    <script>
+        // Reveal elements on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Photo Upload Handling - Real upload to Family Archive
+        const photoInput = document.getElementById('photo-input');
+        const feedback = document.getElementById('upload-feedback');
+
+        photoInput.addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if (files.length === 0) return;
+
+            feedback.style.display = 'block';
+            feedback.style.color = '#666';
+            feedback.innerText = `Uploading ${files.length} photo(s) to the family archive...`;
+
+            try {
+                let uploaded = 0;
+
+                for (const file of files) {
+                    // Create form data
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('contributor', 'Memorial_Guest');
+
+                    // Update progress
+                    feedback.innerText = `Uploading photo ${uploaded + 1} of ${files.length}...`;
+
+                    // Send to Netlify Function
+                    const response = await fetch('/.netlify/functions/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        throw new Error(error.error || 'Upload failed');
+                    }
+
+                    uploaded++;
+                }
+
+                // Success!
+                feedback.style.color = '#A68B67';
+                feedback.innerText = `✓ ${uploaded} photo(s) added to the family archive!`;
+
+                // Clear the input so they can upload more
+                photoInput.value = '';
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                feedback.style.color = '#c44';
+                feedback.innerText = `Upload failed: ${error.message}. Please try again.`;
+            }
+        });
+
+        // Sticky Nav Logic
+        const nav = document.getElementById('sticky-nav');
+        const hero = document.getElementById('home');
+        
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    nav.classList.add('visible');
+                } else {
+                    nav.classList.remove('visible');
+                }
+            });
+        }, { threshold: 0.15 }); // Trigger when 15% of hero is still visible (scrolling down)
+        
+        navObserver.observe(hero);
+
+        // Accordion Logic
+        function toggleAccordion(element) {
+            const item = element.parentElement;
+            const content = item.querySelector('.accordion-content');
+            
+            // Close others (optional, but nice for this layout)
+            document.querySelectorAll('.accordion-item').forEach(acc => {
+                if (acc !== item && acc.classList.contains('active')) {
+                    acc.classList.remove('active');
+                    acc.querySelector('.accordion-content').style.maxHeight = null;
+                }
+            });
+
+            item.classList.toggle('active');
+            
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
+        }
+    </script>
+</body>
+</html>
