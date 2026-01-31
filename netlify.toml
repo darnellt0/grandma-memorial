@@ -3,3 +3,7 @@
 
 [functions]
   node_bundler = "esbuild"
+
+[functions."upload"]
+  # Increase request body size limit to 20MB for photo uploads
+  request_body_limit = 20971520
