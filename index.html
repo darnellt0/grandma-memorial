@@ -399,12 +399,12 @@
             <div class="form-card reveal" style="margin-top: 6rem;">
                 <div style="text-align: center; margin-bottom: 2.5rem;">
                     <h3 style="font-size: 1.8rem;">Add to the Legacy</h3>
-                    <p style="color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0.5rem auto;">Help us preserve Ruth's memory by uploading your favorite photos.</p>
+                    <p style="color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0.5rem auto;">Help us preserve Ruth's memory by uploading your favorite photos and videos.</p>
                 </div>
-                
+
                 <div class="upload-zone" onclick="document.getElementById('photo-input').click()">
-                    <input type="file" id="photo-input" hidden multiple accept="image/*">
-                    <p style="font-size: 1.1rem;"><strong>Tap here to select photos</strong></p>
+                    <input type="file" id="photo-input" hidden multiple accept="image/*,video/*">
+                    <p style="font-size: 1.1rem;"><strong>Tap here to select photos or videos</strong></p>
                     <p style="font-size: 0.85rem; margin-top: 0.5rem; opacity: 0.7;">Upload from your camera roll or computer</p>
                 </div>
                 <div id="upload-feedback" style="display:none; text-align: center; margin-top: 1.5rem; color: var(--accent); font-weight: 500;"></div>
@@ -535,7 +535,7 @@
 
             feedback.style.display = 'block';
             feedback.style.color = '#666';
-            feedback.innerText = `Uploading ${files.length} photo(s) to the family archive...`;
+            feedback.innerText = `Uploading ${files.length} file(s) to the family archive...`;
 
             try {
                 let uploaded = 0;
@@ -547,7 +547,7 @@
                     formData.append('contributor', 'Memorial_Guest');
 
                     // Update progress
-                    feedback.innerText = `Uploading photo ${uploaded + 1} of ${files.length}...`;
+                    feedback.innerText = `Uploading file ${uploaded + 1} of ${files.length}...`;
 
                     // Send to Netlify Function
                     const response = await fetch('/.netlify/functions/upload', {
@@ -565,7 +565,7 @@
 
                 // Success!
                 feedback.style.color = '#A68B67';
-                feedback.innerHTML = `✓ ${uploaded} photo(s) added to the family archive!<br><a href="https://family-archive-vault-production.up.railway.app/gallery" target="_blank" style="color: #A68B67; text-decoration: underline; margin-top: 0.5rem; display: inline-block;">View Family Gallery →</a>`;
+                feedback.innerHTML = `✓ ${uploaded} file(s) added to the family archive!<br><a href="https://family-archive-vault-production.up.railway.app/gallery" target="_blank" style="color: #A68B67; text-decoration: underline; margin-top: 0.5rem; display: inline-block;">View Family Gallery →</a>`;
 
                 // Clear the input so they can upload more
                 photoInput.value = '';

@@ -5,5 +5,7 @@
   node_bundler = "esbuild"
 
 [functions."upload"]
-  # Increase request body size limit to 20MB for photo uploads
-  request_body_limit = 20971520
+  # Increase request body size limit to 50MB for photo/video uploads
+  request_body_limit = 52428800
+  # Increase timeout to 60 seconds for large video uploads
+  timeout = 60
