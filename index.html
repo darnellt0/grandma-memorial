@@ -403,7 +403,15 @@
                 <p>No photos yet. Be the first to share a memory!</p>
             </div>
 
-            <div class="form-card reveal" style="margin-top: 6rem;">
+            <!-- Link to view all uploads in full gallery -->
+            <div class="reveal" style="text-align: center; margin-top: 3rem;">
+                <a href="https://family-archive-vault-production.up.railway.app/gallery" target="_blank" class="btn">
+                    View Full Gallery →
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem;">See all photos and videos with slideshow feature</p>
+            </div>
+
+            <div class="form-card reveal" style="margin-top: 5rem;">
                 <div style="text-align: center; margin-bottom: 2.5rem;">
                     <h3 style="font-size: 1.8rem;">Add to the Legacy</h3>
                     <p style="color: var(--text-muted); font-size: 1rem; max-width: 500px; margin: 0.5rem auto;">Help us preserve Ruth's memory by uploading your favorite photos and videos.</p>
@@ -730,10 +738,16 @@
 
                 // Success!
                 feedback.style.color = '#A68B67';
-                feedback.innerHTML = `✓ ${uploaded} file(s) added to the family archive!<br><a href="https://family-archive-vault-production.up.railway.app/gallery" target="_blank" style="color: #A68B67; text-decoration: underline; margin-top: 0.5rem; display: inline-block;">View Family Gallery →</a>`;
+                feedback.innerHTML = `✓ ${uploaded} file(s) added to the family archive! Refreshing gallery...`;
 
                 // Clear the input so they can upload more
                 photoInput.value = '';
+
+                // Refresh the gallery to show new photos
+                setTimeout(async () => {
+                    await loadGallery();
+                    feedback.innerHTML = `✓ ${uploaded} file(s) added! <span style="color: #4ade80;">Gallery updated ↑</span>`;
+                }, 2000); // Small delay to allow R2 to process
 
             } catch (error) {
                 console.error('Upload error:', error);

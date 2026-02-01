@@ -50,28 +50,47 @@ exports.handler = async (event, context) => {
       },
     });
 
-    // List all objects in the bucket
-    const listCommand = new ListObjectsV2Command({
-      Bucket: R2_BUCKET_NAME,
-      MaxKeys: 100, // Limit to 100 photos for performance
-    });
+    // List ALL objects in the bucket (paginate to get everything)
+    let allObjects = [];
+    let continuationToken = null;
 
-    const listResponse = await r2Client.send(listCommand);
-    const objects = listResponse.Contents || [];
+    do {
+      const listCommand = new ListObjectsV2Command({
+        Bucket: R2_BUCKET_NAME,
+        MaxKeys: 1000,
+        ContinuationToken: continuationToken,
+      });
 
-    // Filter for image and video files only
+      const listResponse = await r2Client.send(listCommand);
+      const objects = listResponse.Contents || [];
+      allObjects = allObjects.concat(objects);
+      continuationToken = listResponse.IsTruncated ? listResponse.NextContinuationToken : null;
+    } while (continuationToken);
+
+    // Filter for image and video files only (exclude manifests)
     const mediaExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.heic', '.heif', '.mp4', '.mov', '.webm'];
-    const mediaFiles = objects.filter(obj => {
+    const mediaFiles = allObjects.filter(obj => {
       const key = obj.Key.toLowerCase();
+      // Exclude manifest files and hidden files
+      if (key.startsWith('_') || key.includes('manifest')) return false;
       return mediaExtensions.some(ext => key.endsWith(ext));
     });
 
-    // Sort by last modified (newest first)
-    mediaFiles.sort((a, b) => new Date(b.LastModified) - new Date(a.LastModified));
+    // Shuffle array randomly (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Randomly shuffle and pick 50 photos
+    const shuffledFiles = shuffleArray([...mediaFiles]);
 
     // Generate signed URLs for each file (valid for 1 hour)
     const photos = await Promise.all(
-      mediaFiles.slice(0, 50).map(async (obj) => {
+      shuffledFiles.slice(0, 50).map(async (obj) => {
         const getCommand = new GetObjectCommand({
           Bucket: R2_BUCKET_NAME,
           Key: obj.Key,
