@@ -623,8 +623,8 @@
         const photoInput = document.getElementById('photo-input');
         const feedback = document.getElementById('upload-feedback');
 
-        // Size threshold for direct upload (5MB)
-        const DIRECT_UPLOAD_THRESHOLD = 5 * 1024 * 1024;
+        // Size threshold for direct upload (4MB - lowered to avoid Netlify limits)
+        const DIRECT_UPLOAD_THRESHOLD = 4 * 1024 * 1024;
 
         // Upload small files through Netlify function
         async function uploadSmallFile(file) {
