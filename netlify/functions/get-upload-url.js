@@ -1,8 +1,9 @@
 // Netlify Function to generate presigned URLs for direct R2 uploads
 // This allows large files to bypass Netlify's size limits
 
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, HeadObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const crypto = require("crypto");
 
 // R2 Configuration
 const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
@@ -54,7 +55,7 @@ exports.handler = async (event, context) => {
 
     // Parse request body
     const body = JSON.parse(event.body);
-    const { filename, contentType, size } = body;
+    const { filename, contentType, size, fileHash } = body;
 
     if (!filename) {
       return {
@@ -64,10 +65,41 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Generate object key
-    const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    // Generate object key using file hash if provided, otherwise use timestamp
+    // Hash-based keys prevent duplicates (same content = same key)
     const safeFilename = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const objectKey = `Memorial_Guest_UPLOADS/${timestamp}_${safeFilename}`;
+    let objectKey;
+
+    if (fileHash) {
+      // Use provided hash for deduplication
+      objectKey = `Memorial_Guest_UPLOADS/${fileHash}_${safeFilename}`;
+
+      // Check if file already exists
+      try {
+        await r2Client.send(new HeadObjectCommand({
+          Bucket: R2_BUCKET_NAME,
+          Key: objectKey,
+        }));
+        // File already exists - return skip response
+        console.log(`Skipped duplicate: ${objectKey}`);
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            success: true,
+            skipped: true,
+            objectKey: objectKey,
+            message: "File already exists",
+          }),
+        };
+      } catch (err) {
+        // File doesn't exist, proceed
+      }
+    } else {
+      // Fallback to timestamp-based key (for backwards compatibility)
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      objectKey = `Memorial_Guest_UPLOADS/${timestamp}_${safeFilename}`;
+    }
 
     // Create presigned URL for direct upload (valid for 1 hour)
     const command = new PutObjectCommand({

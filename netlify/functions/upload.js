@@ -1,12 +1,18 @@
 // Netlify Function to upload photos to Cloudflare R2
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, HeadObjectCommand } = require("@aws-sdk/client-s3");
 const busboy = require("busboy");
+const crypto = require("crypto");
 
 // R2 Configuration
 const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID;
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY;
 const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || "family-archive-uploads";
+
+// Generate a short hash of file content for deduplication
+function hashFileContent(buffer) {
+  return crypto.createHash("md5").update(buffer).digest("hex").slice(0, 12);
+}
 
 exports.handler = async (event, context) => {
   const headers = {
@@ -72,8 +78,32 @@ exports.handler = async (event, context) => {
     const uploadedFiles = [];
 
     for (const file of files) {
+      // Generate content hash for deduplication
+      const contentHash = hashFileContent(file.content);
       const safeFilename = file.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
-      const objectKey = `${folderName}/${timestamp}_${safeFilename}`;
+
+      // Use hash-based key to prevent duplicates: hash_originalname.ext
+      // This ensures same file content = same key = no duplicate
+      const objectKey = `${folderName}/${contentHash}_${safeFilename}`;
+
+      // Check if this exact file already exists
+      try {
+        await r2Client.send(new HeadObjectCommand({
+          Bucket: R2_BUCKET_NAME,
+          Key: objectKey,
+        }));
+        // File already exists - skip upload
+        console.log(`Skipped duplicate: ${objectKey}`);
+        uploadedFiles.push({
+          filename: file.filename,
+          objectKey: objectKey,
+          size: file.content.length,
+          skipped: true,
+        });
+        continue;
+      } catch (err) {
+        // File doesn't exist, proceed with upload
+      }
 
       const command = new PutObjectCommand({
         Bucket: R2_BUCKET_NAME,
