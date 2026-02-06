@@ -383,26 +383,41 @@
 
                 <!-- Memorial Service Live Stream -->
                 <div style="width: 100%; max-width: 900px; margin: 0 auto 3rem; border-radius: 12px; overflow: hidden; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.2);">
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0; cursor: pointer;" class="video-container" data-video-id="5YqrYo7tqAc">
                         <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" src="https://www.youtube.com/embed/5YqrYo7tqAc" title="Memorial Service Live Stream" allowfullscreen></iframe>
                     </div>
-                    <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">Memorial Service Live Stream</p>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Memorial Service Live Stream</p>
+                        <a href="https://www.youtube.com/live/5YqrYo7tqAc?si=6wXVEccxvPIN0bMZ" target="_blank" style="color: var(--primary); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            Watch on YouTube →
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Photo Slideshow -->
                 <div style="width: 100%; max-width: 900px; margin: 0 auto 3rem; border-radius: 12px; overflow: hidden; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.2);">
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0; cursor: pointer;" class="video-container" data-video-id="sKDA_Gxw3RU">
                         <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" src="https://www.youtube.com/embed/sKDA_Gxw3RU" title="Photo Slideshow" allowfullscreen></iframe>
                     </div>
-                    <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">Photo Slideshow</p>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Photo Slideshow</p>
+                        <a href="https://youtu.be/sKDA_Gxw3RU" target="_blank" style="color: var(--primary); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            Watch on YouTube →
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Original Tribute Video -->
                 <div style="width: 100%; max-width: 900px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 40px 80px -20px rgba(0,0,0,0.2);">
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0; cursor: pointer;" class="video-container" data-video-id="z6mH4ccl9u0">
                         <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" src="https://www.youtube.com/embed/z6mH4ccl9u0" title="Ruth Tribute" allowfullscreen></iframe>
                     </div>
-                    <p style="text-align: center; margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">Tribute Video</p>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Tribute Video</p>
+                        <a href="https://www.youtube.com/watch?v=z6mH4ccl9u0" target="_blank" style="color: var(--primary); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            Watch on YouTube →
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -850,6 +865,115 @@
             } else {
                 content.style.maxHeight = null;
             }
+        }
+
+        // Video Modal Functionality
+        const videoModal = document.createElement('div');
+        videoModal.id = 'video-modal';
+        videoModal.style.cssText = `
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            animation: fadeIn 0.3s ease;
+        `;
+        videoModal.innerHTML = `
+            <style>
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                #video-modal-close {
+                    position: absolute;
+                    top: 20px;
+                    right: 35px;
+                    color: #f1f1f1;
+                    font-size: 40px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    z-index: 10001;
+                    transition: color 0.3s;
+                }
+                #video-modal-close:hover {
+                    color: #ccc;
+                }
+                #video-modal-content {
+                    position: relative;
+                    margin: auto;
+                    padding: 0;
+                    width: 90%;
+                    max-width: 1200px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+                #video-modal-iframe {
+                    position: relative;
+                    padding-bottom: 56.25%;
+                    height: 0;
+                    overflow: hidden;
+                }
+                #video-modal-iframe iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                }
+            </style>
+            <span id="video-modal-close">&times;</span>
+            <div id="video-modal-content">
+                <div id="video-modal-iframe"></div>
+            </div>
+        `;
+        document.body.appendChild(videoModal);
+
+        const modalClose = document.getElementById('video-modal-close');
+        const modalIframeContainer = document.getElementById('video-modal-iframe');
+
+        // Add click handlers to all video containers
+        document.querySelectorAll('.video-container').forEach(container => {
+            container.addEventListener('click', function(e) {
+                const videoId = this.getAttribute('data-video-id');
+                if (videoId) {
+                    modalIframeContainer.innerHTML = `
+                        <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+                                title="Video"
+                                allowfullscreen
+                                allow="autoplay">
+                        </iframe>
+                    `;
+                    videoModal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Close modal handlers
+        modalClose.addEventListener('click', function() {
+            closeVideoModal();
+        });
+
+        videoModal.addEventListener('click', function(e) {
+            if (e.target === videoModal) {
+                closeVideoModal();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && videoModal.style.display === 'block') {
+                closeVideoModal();
+            }
+        });
+
+        function closeVideoModal() {
+            videoModal.style.display = 'none';
+            modalIframeContainer.innerHTML = '';
+            document.body.style.overflow = '';
         }
     </script>
 </body>
